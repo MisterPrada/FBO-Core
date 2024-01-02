@@ -127,21 +127,6 @@ export default class Page {
             v.w = 0.0;
             if (v.length() > 1) return getPoint(v, size);
             return v.normalize().multiplyScalar(size);
-
-            //exact but slow-ish
-            /*
-            var phi = Math.random() * 2 * Math.PI;
-            var costheta = Math.random() * 2 -1;
-            var u = Math.random();
-
-            var theta = Math.acos( costheta );
-            var r = size * Math.cbrt( u );
-
-            v.x = r * Math.sin( theta) * Math.cos( phi );
-            v.y = r * Math.sin( theta) * Math.sin( phi );
-            v.z = r * Math.cos( theta );
-            return v;
-            //*/
         }
 
         //returns a Float32Array buffer of spherical 3D points
@@ -198,66 +183,11 @@ export default class Page {
         this.FBO = new FBO(width, height, this.renderer, this.simulationShader, this.renderShader);
 
         this.scene.add(  this.FBO.particles );
-
-
-        // var data = getRandomData( width, height, 30 );
-        // var positions = new THREE.DataTexture( data, width, height, THREE.RGBAFormat, THREE.FloatType );
-        // positions.needsUpdate = true;
-        // var uTextureA = positions;
-
-        //simulation shader used to update the particles' positions
-        // this.simMaterial = new THREE.ShaderMaterial({
-        //     uniforms:{
-        //         uTextureA: { type: "t", value: uTextureA },
-        //         uTextureB: { type: "t", value: uTextureB },
-        //         uTextureC: { type: "t", value: uTextureC },
-        //         uTextureD: { type: "t", value: uTextureD },
-        //         uTextureE: { type: "t", value: uTextureE },
-        //         uTime: { value: 0 },
-        //         uScroll : { value: this.normalizedScrollY },
-        //         uTreePos : { value: new THREE.Vector3() },
-        //     },
-        //     defines:
-        //     {
-        //         uTotalModels : parseFloat(this.sectionCount).toFixed(2),
-        //     },
-        //     vertexShader: simVertex,
-        //     fragmentShader:  simFragment
-        // });
-        //
-        // //render shader to display the particles on screen
-        // //the 'positions' uniform will be set after the FBO.update() call
-        // this.renderMaterial = new THREE.ShaderMaterial( {
-        //     uniforms: {
-        //         uPositions: { value: null },
-        //         uSize: { value: 12 },
-        //         uTime: { value: 0 },
-        //         uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
-        //         uScroll : { value: this.normalizedScrollY },
-        //     },
-        //     defines:
-        //     {
-        //         uTotalModels : parseFloat(this.sectionCount).toFixed(2),
-        //         uRange : this.range,
-        //     },
-        //     vertexShader: particlesVertex,
-        //     fragmentShader: particlesFragment,
-        //     transparent: true,
-        //     depthWrite: false,
-        //     blending: THREE.AdditiveBlending
-        // } );
-        //
-        // // Initialize the FBO
-        // this.fbo = new FBO(width, height, this.renderer, this.simMaterial, this.renderMaterial);
-        //
-        // // Add the particles to the scene
-        // this.scene.add(this.fbo.particles);
-
     }
 
     resize() {
-        //this.fbo.resize(this.sizes.width, this.sizes.height);
-        //this.renderMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2)
+        this.FBO.resize(this.sizes.width, this.sizes.height);
+        this.renderShader.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2)
     }
 
     setAnimation() {

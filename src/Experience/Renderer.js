@@ -72,14 +72,14 @@ export default class Renderer
         // Bloom pass
         this.postProcess.unrealBloomPass = new UnrealBloomPass(
             new THREE.Vector2(this.sizes.width, this.sizes.height),
-            2.2,
+            1.8,
             1.0,
             0
         )
         this.postProcess.unrealBloomPass.enabled = true
 
         this.postProcess.unrealBloomPass.tintColor = {}
-        this.postProcess.unrealBloomPass.tintColor.value = '#000000'
+        this.postProcess.unrealBloomPass.tintColor.value = '#790000'
         this.postProcess.unrealBloomPass.tintColor.instance = new THREE.Color(this.postProcess.unrealBloomPass.tintColor.value)
 
         this.postProcess.unrealBloomPass.compositeMaterial.uniforms.uTintColor = { value: this.postProcess.unrealBloomPass.tintColor.instance }
@@ -115,6 +115,7 @@ void main() {
     gl_FragColor = color;
 }
         `
+
         /**
          * Effect composer
          */
@@ -135,8 +136,8 @@ void main() {
         this.postProcess.composer.setSize(this.sizes.width, this.sizes.height)
         this.postProcess.composer.setPixelRatio(this.sizes.pixelRatio)
 
-        this.postProcess.composer.addPass(this.postProcess.renderPass)
-        this.postProcess.composer.addPass(this.postProcess.unrealBloomPass)
+        this.postProcess.composer.addPass( this.postProcess.renderPass )
+        this.postProcess.composer.addPass( this.postProcess.unrealBloomPass )
     }
 
     setDebug()
@@ -197,6 +198,8 @@ void main() {
                     'value',
                     { label: 'uTintStrength', min: 0, max: 1, step: 0.001 }
                 )
+
+
         }
     }
 
